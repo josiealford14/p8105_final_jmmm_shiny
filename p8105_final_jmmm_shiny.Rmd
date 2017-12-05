@@ -2,13 +2,14 @@
 title: "What Drives Drug Prices?: Shiny-Enabled Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: row
+    vertical_layout: scroll
 runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(rsconnect)
+library(jsonlite)
 ```
 
 
@@ -82,14 +83,14 @@ nyc_inspections = get_all_inspections(url) %>%
          violation_description) %>% 
   filter(year == "2016",
          score > "0") %>% 
-sample_n(10000)
+sample_n(100)
 ##final dataset
 ```
 
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-This `flexdashboard` with Shiny was made using openly available 2016 NYC Health Inspection restaurant [data](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/xx67-kt59/data). The boxplot demonstrates numerical inspection scores, the scatterplot compares mean scores for three different cuisines, and the bar chart illustrates mean scores for popular cuisines with pest-related violations. 
+This `flexdashboard` with Shiny was made using openly available 2016 NYC Health Inspection restaurant [data](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/xx67-kt59/data). The boxplot demonstrates numerical inspection scores, the scatterplot compares mean scores for three different cuisines, and the bar chart illustrates mean scores for popular cuisines with pest-related violations.
 ```{r}
 borough = nyc_inspections %>% distinct(borough) %>% pull()
 
@@ -107,7 +108,7 @@ radioButtons("grade", label = h3("Choose grade"),
 ```
 
 
-Row
+Column
 -----------------------------------------------------------------------
 
 ### Boxplot 
@@ -125,8 +126,8 @@ nyc_inspections %>%
 })
 ```
 
-Row {.tabset .tabset-fade}
------------------------------------------------------------------------
+<!-- Row {.tabset .tabset-fade} -->
+<!-- ----------------------------------------------------------------------- -->
 
 ### Scatterplot 
 
