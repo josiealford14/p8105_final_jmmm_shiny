@@ -8,15 +8,13 @@ runtime: shiny
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-library(rsconnect)
-library(jsonlite)
 ```
 
 
-```{r, warning = FALSE}
+```{r}
 library(tidyverse)
 library(tidytext)
-
+library(jsonlite)
 library(broom)
 library(dplyr)
 library(forcats)
@@ -34,7 +32,7 @@ library(shiny)
 ```{r}
 ##load data
 
-final_dataset = read_csv("./data/final_dataset_20171205.csv")
+final_dataset = read_csv("../data/final_dataset_20171205.csv")
 
 top_advertising = c("Humira", "Lyrica", "Eliquis", "Xeljanz", "Cialis", "Invokana", "Breo", "Latuda", "Victoza", "Viagra")
 
@@ -44,6 +42,7 @@ most_abused = c("Vicodin", "OxyContin", "Ritalin", "Concerta", "Focalin", "Metad
 
 most_popular = c("Viagra", "Lipitor", "Xanax", "Celebrex", "Prozac", "Crestor", "Nexium", "Lisinopril", "Zoloft", "Abilify", "Prilosec", "Percocet", "Vicodin", "Zocor")
 
+drugs_interest = c("Lyrica", "Eliquis", "Xeljanz", "Cialis", "Invokana", "Breo", "Latuda", "Victoza", "Viagra", "Humira", "Harvoni", "Enbrel", "Lantus Solostar", "Remicade", "Januvia", "Advair Diskus", "Crestor", "Neulasta", "Copaxone", "Rituxan", "Tecfidera", "Xarelto", "Lantus", "Eliquis", "Truvada", "Vyvanse", "Avastin", "Symbicort", "Vicodin", "OxyContin", "Ritalin", "Concerta", "Focalin", "Metadate", "Ambien", "Lunesta", "Valium","Duragesic", "Opana", "Darvon", "Dilaudid", "Demerol", "Lomotil", "Nembutal", "Dexedrine", "Adderall", "Percocet", "Suboxone", "Fentanyl", "Lipitor", "Xanax", "Celebrex", "Prozac", "Crestor", "Nexium", "Lisinopril", "Zoloft", "Abilify", "Prilosec", "Percocet","Zocor")
 
 drug_price = read_csv("../data/drug_price.csv") %>%
   clean_names()
@@ -66,7 +65,7 @@ drug_price =
   filter(is.na(remove)) %>%
   select(-remove) %>% 
   filter(pricing_unit == "GM" | pricing_unit == "EA") %>% 
-  select(trade_name, everything()) 
+  select(trade_name, everything())
 
 patents = final_dataset %>%
   ungroup() %>% 
@@ -124,13 +123,16 @@ This `flexdashboard` with Shiny shows some of the results of our analysis on dru
 
 * Use the final widget to look at the number of expiring patents for one or more companies (top 14).
 
-
+* [Project Website](https://josiealford14.github.io/p8105_final_jmmm/)
 
 ```{r}
 
-drugs = final_dataset %>% filter(trade_name %in% most_abused) %>%  pull(trade_name) %>% unique()
+# drugs = final_dataset %>% filter(trade_name %in% most_abused) %>%  pull(trade_name) %>% unique()
 
-selectInput("drug", label = h3("Most Abused Drugs"),
+# drugs_interest
+drugs = final_dataset %>% filter(trade_name %in% drugs_interest) %>%  pull(trade_name) %>% unique()
+
+selectInput("drug", label = h3("Drugs of Interest"),
             choices = drugs, selected = "Ambien")
 
 
@@ -171,8 +173,6 @@ renderPlot(
 
 ```
 
-<!-- Row {.tabset .tabset-fade} -->
-<!-- ----------------------------------------------------------------------- -->
 
 ### Spaghetti Plot
 
